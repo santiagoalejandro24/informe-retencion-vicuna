@@ -1,4 +1,3 @@
-
 import streamlit as st
 from datetime import datetime
 from docx import Document
@@ -15,8 +14,13 @@ dni = st.text_input("🪪 DNI o identificación")
 empresa = st.text_input("🏢 Empresa (Ej: Transporte Coopera)")
 unidad = st.text_input("🔧 Proyecto / Unidad", value="Vicuña Filo del Sol")
 
+tipo_retencion = st.selectbox(
+    "📦 Tipo de retención",
+    ["Chequeo de bolsos", "Retención vehicular"]
+)
+
 motivo = st.text_area("📝 Motivo de la retención", value="retención de exceso de viandas excediendo el límite permitido.")
-elementos = st.text_area("📦 Elementos retenidos (uno por línea)", value="""6 jugos Baggios
+elementos = st.text_area("📋 Elementos retenidos (uno por línea)", value="""6 jugos Baggios
 6 turrones
 6 sobres de café
 10 sobres de azúcar 
@@ -32,8 +36,8 @@ if st.button("📤 Generar informe"):
 
     hora_str = hora.strftime("%H:%M")
     parrafo = (
-        f"Se informa que siendo las {hora_str}hs, {nombre_guardia} realiza control de egreso de chequeo "
-        f"de equipaje al Sr. {nombre_persona}, DNI: {dni}, empresa {empresa}, perteneciente a {unidad}. "
+        f"Se informa que siendo las {hora_str}hs, {nombre_guardia} realiza control de egreso de "
+        f"{tipo_retencion.lower()} al Sr. {nombre_persona}, DNI: {dni}, empresa {empresa}, perteneciente a {unidad}. "
         f"Se procede a realizar {motivo.strip()}"
     )
     doc.add_paragraph(parrafo)
@@ -56,3 +60,4 @@ if st.button("📤 Generar informe"):
         file_name=nombre_archivo,
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
+    
